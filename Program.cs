@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
+using System.Linq;
 
 namespace CitiesOfIran
 {
@@ -37,18 +38,12 @@ namespace CitiesOfIran
                     keyValuePairs.Add(state, citiesSortedSet);
                 }
             }
-
-            var list = new List<Model>();
+            var models = new List<Model>();
             foreach (var (key, value) in keyValuePairs)
             {
-                var l = new List<string>();
-                foreach (var item in value)
-                {
-                    l.Add(item);
-                }
-                list.Add(new Model(key, l));
+                models.Add(new Model(key, value.ToList()));
             }
-            File.WriteAllText(outputPath, JsonToUtf8String(ref list));
+            File.WriteAllText(outputPath, JsonToUtf8String(ref models));
         }
 
         private static string JsonToUtf8String<T>(ref T t)
@@ -58,8 +53,7 @@ namespace CitiesOfIran
                 WriteIndented = true,
                 Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
             };
-            byte[] json = JsonSerializer.SerializeToUtf8Bytes(t, t.GetType(), jsonOptions);
-            return Encoding.UTF8.GetString(json);
+            return Encoding.UTF8.GetString(JsonSerializer.SerializeToUtf8Bytes(t, t.GetType(), jsonOptions));
         }
     }
 }
