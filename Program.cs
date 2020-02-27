@@ -48,17 +48,10 @@ namespace CitiesOfIran
                 }
                 list.Add(new Model(key, l));
             }
-            //var jsonOptions = new JsonSerializerOptions()
-            //{
-            //    WriteIndented = true,
-            //    Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
-            //};
-            //var json = JsonSerializer.SerializeToUtf8Bytes(list, list.GetType(), jsonOptions);
-            //File.WriteAllText(outputPath, Encoding.UTF8.GetString(json));
-            File.WriteAllText(outputPath, JsonUtf8Serializer(ref list));
+            File.WriteAllText(outputPath, JsonToUtf8String(ref list));
         }
 
-        public static string JsonUtf8Serializer<T>(ref T t)
+        private static string JsonToUtf8String<T>(ref T t)
         {
             var jsonOptions = new JsonSerializerOptions()
             {
